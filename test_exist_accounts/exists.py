@@ -47,6 +47,7 @@ class CheckYandex:
         self.driver.get(self.url)
 
     def login(self, mail, passwd):
+
         # Вводим данные для входа в аккаунт.
         mail_field = self.wait.until(ec.presence_of_element_located((By.ID, 'login')))
         mail_field.click()
