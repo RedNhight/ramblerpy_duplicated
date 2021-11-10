@@ -38,4 +38,3 @@ class FosyProxyTools:
         else:
             print(f"{address} isn't valid. ")
 
-
