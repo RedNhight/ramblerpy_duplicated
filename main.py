@@ -112,6 +112,7 @@ if __name__ == '__main__':
             # register_yandex_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9')
             # register_rambler_account(random.choice(list_of_ip), 'mail@rambler@gmail.com', '587090417529ff6968eb9f0cb806c0e9')
         if len(list_of_ip) == 1:
+            
             fake_auth_rambler(list_of_ip[0], 'mail@rambler.ru', 'passwd')
             # fake_auth_yandex(list_of_ip[0], 'kopylovnikitanikita@yandex.ru', 'MnS90099')
             # register_yandex_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9')
