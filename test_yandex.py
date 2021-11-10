@@ -16,6 +16,7 @@ class Test(TestCase):
         current_proxy = fosy_proxy.get_proxy("http")
         register_yandex_account(current_proxy, TEST_RECEIVER, TWOCAPTCHA_TOKEN)
         self.fail("Not finished")
+        
         receivers = [TEST_RECEIVER]
         accounts = []
         for i in range(0,10):
