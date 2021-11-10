@@ -1,0 +1,14 @@
+requests==2.26.0
+selenium==4.0.0a1
+beautifulsoup4==4.9.3
+2captcha-python==1.1.0
+python-rucaptcha==3.0.1
+pandas==1.1.5
+openpyxl==3.0.3
+XlsxWriter==1.1.2
+df2gspread==1.0.4
+gspread==4.0.1
+proxy-checker==0.6
+PySocks==1.5.7
+transliterate==1.10.2
+fake-useragent=0.1.11
