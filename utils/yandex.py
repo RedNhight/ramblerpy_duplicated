@@ -207,6 +207,13 @@ class Yandex:
             self.step = 'Сообщение ошибки при отправке сообщения: ' + statusline.text
         except Exception as ex:
             pass
+        sleep(1)
+        try:
+            status_lin = self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[10]/div/div/div[1]/div/div[2]/div/div[1]/div[3]/div/div/div/div/div[1]/span')
+            if status_lin.text == 'Письмо не отправлено':
+                self.step = f'Сообщение отправлено, но с ошибкой: Письмо не отправлено, потому что текст письма похож на спам'
+        except Exception as ex:
+            pass
 
     def driver_close(self):
         self.driver.quit()
