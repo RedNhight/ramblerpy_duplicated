@@ -35,7 +35,7 @@ class Yandex:
         self.profile.set_preference("network.proxy.type", 1)
         self.profile.set_preference("network.proxy.http", str(self.PROXY[0]))
         self.profile.set_preference("network.proxy.http_port", int(self.PROXY[1]))
-        self.profile.set_preference("general.useragent.override", self.useragent.firefox)
+        # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
         self.profile.set_preference('dom.webdriver.enabled', False)
         self.profile.set_preference('useAutomationExtension', False)
         self.profile.set_preference("intl.accept_languages", "en-en")
@@ -55,7 +55,10 @@ class Yandex:
         # self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.wait = WebDriverWait(self.driver, 5)
         self.longer = WebDriverWait(self.driver, 30)
-        self.driver.get(self.yandex_url)
+        try:
+            self.driver.get(self.yandex_url)
+        except Exception as ex:
+            self.driver.quit()
         sleep(2)
         self.driver.refresh()
 
@@ -130,6 +133,7 @@ class Yandex:
             captcha_answer = solve_normal_captcha(self.filename + '.png', self.captcha_token)
         except Exception as ex:
             os.system(f'rm {self.filename}.png')
+            print(ex)
             self.step = f'Решение капчи: {ex}'
         self.answer[7].click()
         action = ActionChains(self.driver)
@@ -154,6 +158,12 @@ class Yandex:
                 self.step = f'Введение и подтверждение капчи; ошибка: {uncorrect_captcha.text}'
         except Exception as ex:
             pass
+
+        try:
+            avatar_add = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div/div/div[1]/div[2]/main/div/div/div/div[3]/span/a')))
+            avatar_add.click()
+        except Exception as ex:
+            pass
         os.system(f'rm {self.filename}.png')
 
     def send_mail(self, receiver, msg):
@@ -168,26 +178,26 @@ class Yandex:
         self.driver.refresh()
 
         self.step = 'Подготовка к написанию письма.'
-        write_a_msg = self.longer.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div[2]/form/div[1]/div[1]/span[1]/a')))
+        write_a_msg = self.longer.until(ec.presence_of_element_located((By.CLASS_NAME, 'mail-ComposeButton-Text')))
         write_a_msg.click()
 
         self.step = 'Ввод адреса отправителя. '
-        rec_input = self.wait.until(ec.presence_of_element_located((By.NAME, 'to')))
+        rec_input = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div[10]/div/div/div[1]/div/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div[1]/div[1]/div/div/div/div/div')))
         rec_input.click()
         rec_input.send_keys(receiver)
 
         self.step = 'Ввод темы для отправки.'
-        to_msg = self.driver.find_element_by_name('subj')
+        to_msg = self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[10]/div/div/div[1]/div/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div[1]/div[3]/div/div/input')
         to_msg.click()
         to_msg.send_keys(f'Приветствие. ')
 
         self.step = 'Ввод сообщения для отправки'
-        msg_field = self.driver.find_element_by_name('send')
+        msg_field = self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[10]/div/div/div[1]/div/div[2]/div/div[1]/div[1]/div[1]/div/div[3]/div[2]/div[2]/div[1]/div/div/div')
         msg_field.click()
         print(msg)
         msg_field.send_keys(msg)
 
-        doit = self.driver.find_element_by_name('doit')
+        doit = self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[10]/div/div/div[1]/div/div[2]/div/div[1]/div[1]/div[2]/div/div[1]/div[1]/button')
         doit.click()
         sleep(2)
         self.step = 'Успех!'
