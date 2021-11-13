@@ -36,7 +36,6 @@ class Rambler:
         }
         self.rambler_url = 'https://id.rambler.ru/login-20/mail-registration?rname=head&back=https%3A%2F%2Fwww.rambler.ru%2F&param=popup&iframeOrigin=https%3A%2F%2Fwww.rambler.ru'
         self.driver = webdriver.Firefox(proxy=self.firecap, firefox_profile=self.profile)
-        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.wait = WebDriverWait(self.driver, 5)
         self.longer = WebDriverWait(self.driver, 30)
         self.driver.get(self.rambler_url)
@@ -44,7 +43,7 @@ class Rambler:
 
     def pars_captcha_image(self):
         self.step = 'Парсинг url нашей captcha. '
-        captcha = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/article/form/section[2]/div/div/div[1]/img')))
+        captcha = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[2]/div/div/div/div[1]/form/section[6]/div/div/div[1]/img')))
         return captcha.get_attribute('src')
 
     def fill_the_fields(self, mail, password, answer_on_the_question):
@@ -62,7 +61,7 @@ class Rambler:
         confirm_passwd.click()
         confirm_passwd.send_keys(password)
 
-        question = self.driver.find_element_by_id('question')
+        question = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div/div/div/div[1]/form/section[4]/div/div/div[1]/div/div/div/input')
         question.click()
 
         sleep(2)
@@ -81,7 +80,7 @@ class Rambler:
 
     def answer_to_the_captcha(self, captcha_answer):
         self.step = 'Вводим капчу. '
-        submit_captcha = self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/article/form/section[2]/div/div/div[2]/div/div[1]/input')
+        submit_captcha = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div/div/div/div[1]/form/section[6]/div/div/div[2]/div/div[1]/input')
         submit_captcha.click()
         submit_captcha.send_keys(captcha_answer)
 
@@ -91,6 +90,11 @@ class Rambler:
         sleep(10)
 
     def handle_an_error(self):
+        try:
+            captcha_err = self.wait.until(ec.presence_of_element_located((By.CLASS_NAME, 'rui-FieldStatus-message')))
+            self.step = captcha_err.text
+        except Exception as ex:
+            pass
         try:
             # captcha_error = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[1]/div/article/form/section[2]/div/div/div[2]/div/div[2]')))
             captcha_error = self.driver.find_elements_by_class_name('rui-FieldStatus-message')
