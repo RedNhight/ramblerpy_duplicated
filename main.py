@@ -50,9 +50,9 @@ def register_yandex_account(proxy, receiver, twocaptcha_token):
         y.send_mail(receiver=receiver, msg=f'Приветствую, {rf[2]} {rf[3]}. ::: {ptp[1]}')
     except Exception as ex:
         pass
-        # y.driver_close()
+        y.driver_close()
     error_step = y.return_error()
-    # y.driver_close()
+    y.driver_close()
     result = {
         'result': error_step,
         'mail': f'{rf[0]}@yandex.ru',
@@ -82,6 +82,7 @@ def register_rambler_account(proxy, mail_to_receive, twocaptcha_token):
             captcha_code = solve_normal_captcha(captcha_image, twocaptcha_token)
             r.answer_to_the_captcha(captcha_answer=captcha_code)
         except Exception as ex:
+            print(ex)
             r.step = 'ERROR_ZERO_BALANCE'
 
         if r.step != 'ERROR_ZERO_BALANCE':
@@ -91,19 +92,27 @@ def register_rambler_account(proxy, mail_to_receive, twocaptcha_token):
     except Exception as ex:
         pass
     r.driver_close()
-    return [r.return_error(), rf[0]+'@rambler.ru', rf[1], txt[0]]
+    result = {
+        'result': r.return_error(),
+        'mail': f'{rf[0]}@rambler.ru',
+        'password': rf[1],
+        'secret': txt[0]
+
+    }
+    return result
+    # return [r.return_error(), rf[0]+'@rambler.ru', rf[1], txt[0]]
 
 
 if __name__ == '__main__':
     while True:
         ip = [
-            '146.59.18.78:5015',
-            '146.59.18.78:5016',
-            '146.59.18.78:5017',
-            '146.59.18.78:5018',
-            '146.59.18.78:5019',
-            '146.59.18.78:5020',
-            '146.59.18.78:5006'
+            '51.68.21.249:5000',
+            '51.68.21.249:5001',
+            '51.68.21.249:5002',
+            '51.68.21.249:5003',
+            '51.68.21.249:5004',
+            '51.68.21.249:5005',
+            '51.68.21.249:5006'
         ]
         while True:
             with Pool(6) as pl:
@@ -115,12 +124,12 @@ if __name__ == '__main__':
             sleep(5)
         if len(list_of_ip) > 1:
             # fake_auth_rambler(random.choice(list_of_ip), 'mail@rambler.ru', 'passwd')
-            fake_auth_yandex(random.choice(list_of_ip), 'prohorrozhkovsari@yandex.ru', 'gkvnxfjj_rH2')
+            # fake_auth_yandex(random.choice(list_of_ip), 'prohorrozhkovsari@yandex.ru', 'gkvnxfjj_rH2')
             # print(register_yandex_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
-            # register_rambler_account(random.choice(list_of_ip), 'mail@rambler@gmail.com', '587090417529ff6968eb9f0cb806c0e9')
+            print(register_rambler_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
         if len(list_of_ip) == 1:
             # fake_auth_rambler(list_of_ip[0], 'mail@rambler.ru', 'passwd')
-            fake_auth_yandex(list_of_ip[0], 'prohorrozhkovsari@yandex.ru', 'gkvnxfjj_rH2')
+            # fake_auth_yandex(list_of_ip[0], 'prohorrozhkovsari@yandex.ru', 'gkvnxfjj_rH2')
             # print(register_yandex_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
-            # register_rambler_account(list_of_ip[0], 'mail@yandex.com', '587090417529ff6968eb9f0cb806c0e9')
+            print(register_rambler_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
         break
