@@ -103,7 +103,7 @@ class Rambler:
             pass
 
     def fill_the_personal_information(self, name, surname, region):
-        self.step = 'Начинаем заполнение персональной информации. '
+        self.step = 'Неверно введена капча.  '
         firstname = self.wait.until(ec.presence_of_element_located((By.ID, 'firstname')))
         firstname.click()
         firstname.send_keys(name)
@@ -123,14 +123,15 @@ class Rambler:
         rul_menu_item[rul_menu].click()
 
         self.step = 'Выбираем месяц рождения. '
-        select_month = self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/article/form/section[4]/div/div/div[1]/div[2]/div/div/div/input')
+        # select_month = self.driver.find_element_by_link_text('Месяц')
+        select_month = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[1]/form/section[4]/div/div/div[1]/div[2]/div/div/div/input')
         select_month.click()
         rul_menu_month = self.driver.find_elements_by_class_name('rui-Select-menuItem')
         rul_month = randint(0, 11)
         rul_menu_month[rul_month].click()
 
         self.step = 'Выбираем год рождения. '
-        select_year = self.driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/div/article/form/section[4]/div/div/div[1]/div[3]/div/div/div/input')
+        select_year = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div[2]/div/div/div[2]/div[1]/form/section[4]/div/div/div[1]/div[3]/div/div/div/input')
         select_year.click()
         rul_menu_year = self.driver.find_elements_by_class_name('rui-Select-menuItem')
         rul_year = randint(26, 46)
