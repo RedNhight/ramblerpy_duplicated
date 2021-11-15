@@ -25,7 +25,6 @@ class CheckYandex:
         self.profile.set_preference("network.proxy.type", 1)
         self.profile.set_preference("network.proxy.http", str(self.PROXY[0]))
         self.profile.set_preference("network.proxy.http_port", int(self.PROXY[1]))
-        self.profile.set_preference("general.useragent.override", self.useragent.firefox)
         self.profile.set_preference('dom.webdriver.enabled', False)
         self.profile.set_preference('useAutomationExtension', False)
         self.profile.set_preference("intl.accept_languages", "en-en")
@@ -47,15 +46,35 @@ class CheckYandex:
         self.driver.get(self.url)
 
     def login(self, mail, passwd):
-
+        try:
+            login_btn = self.wait.until(ec.presence_of_element_located((By.LINK_TEXT, 'Войти')))
+            login_btn.click()
+        except Exception as ex:
+            pass
         # Вводим данные для входа в аккаунт.
-        mail_field = self.wait.until(ec.presence_of_element_located((By.ID, 'login')))
+        mail_field = self.wait.until(ec.presence_of_element_located((By.ID, 'passp-field-login')))
         mail_field.click()
-        mail_field.send_keys(mail)
+        mail_field.send_keys(mail + Keys.ENTER)
 
-        passwd_field = self.wait.until(ec.presence_of_element_located((By.ID, 'passwd')))
+        try:
+            err_msg = self.wait.until(ec.presence_of_element_located((By.XPATH, '//*[@id="field:input-passwd:hint"]')))
+            self.step = err_msg
+            print(self.step)
+            self.driver.close()
+        except Exception as ex:
+            print(ex)
+
+        passwd_field = self.wait.until(ec.presence_of_element_located((By.ID, 'passp-field-passwd')))
         passwd_field.click()
         passwd_field.send_keys(passwd + Keys.ENTER)
+
+        try:
+            err_msg = self.wait.until(ec.presence_of_element_located((By.XPATH, '//*[@id="field:input-passwd:hint"]')))
+            self.step = err_msg
+            print(self.step)
+            self.driver.close()
+        except Exception as ex:
+            print(ex)
 
     def handle_an_error(self):
         # Пытаемся распарсить всплывающее окно об ошибке.
