@@ -15,19 +15,25 @@ from multiprocessing import Pool
 
 def fake_auth_yandex(proxy, mail, passwd):
     cy = CheckYandex(proxy)
-    cy.login(mail, passwd)
-    cy.handle_an_error()
-    cy.check_messages()
-    cy.driver_close()
+    try:
+        cy.login(mail, passwd)
+        cy.handle_an_error()
+        cy.check_messages()
+        cy.driver_close()
+    except Exception as ex:
+        cy.driver_close()
     print(cy.return_an_error())
     return cy.return_an_error()
 
 
 def fake_auth_rambler(proxy, mail, passwd):
     cr = CheckRambler(proxy)
-    cr.login(mail, passwd)
-    cr.handle_login_error()
-    cr.check_messages()
+    try:
+        cr.login(mail, passwd)
+        cr.handle_login_error()
+        cr.check_messages()
+    except Exception as ex:
+        pass
     cr.driver_close()
     print(cr.return_an_error())
     return cr.return_an_error()
@@ -91,7 +97,7 @@ def register_rambler_account(proxy, mail_to_receive, twocaptcha_token):
             r.send_a_message(mail_to_receive, txt[1])
     except Exception as ex:
         pass
-    r.driver_close()
+    # r.driver_close()
     result = {
         'result': r.return_error(),
         'mail': f'{rf[0]}@rambler.ru',
@@ -100,19 +106,18 @@ def register_rambler_account(proxy, mail_to_receive, twocaptcha_token):
 
     }
     return result
-    # return [r.return_error(), rf[0]+'@rambler.ru', rf[1], txt[0]]
 
 
 if __name__ == '__main__':
     while True:
         ip = [
-            '51.68.21.249:5000',
-            '51.68.21.249:5001',
-            '51.68.21.249:5002',
-            '51.68.21.249:5003',
-            '51.68.21.249:5004',
-            '51.68.21.249:5005',
-            '51.68.21.249:5006'
+            '146.59.18.78:5000',
+            '146.59.18.78:5001',
+            '146.59.18.78:5002',
+            '146.59.18.78:5003',
+            '146.59.18.78:5004',
+            '146.59.18.78:5005',
+            '146.59.18.78:5006'
         ]
         while True:
             with Pool(6) as pl:
@@ -124,12 +129,12 @@ if __name__ == '__main__':
             sleep(5)
         if len(list_of_ip) > 1:
             # fake_auth_rambler(random.choice(list_of_ip), 'mail@rambler.ru', 'passwd')
-            # fake_auth_yandex(random.choice(list_of_ip), 'prohorrozhkovsari@yandex.ru', 'gkvnxfjj_rH2')
+            fake_auth_yandex(random.choice(list_of_ip), 'nikita07050565', 'MnS90099__')
             # print(register_yandex_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
-            print(register_rambler_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
+            # print(register_rambler_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
         if len(list_of_ip) == 1:
             # fake_auth_rambler(list_of_ip[0], 'mail@rambler.ru', 'passwd')
-            # fake_auth_yandex(list_of_ip[0], 'prohorrozhkovsari@yandex.ru', 'gkvnxfjj_rH2')
+            fake_auth_yandex(list_of_ip[0], 'nikita07050565', 'MnS90099__')
             # print(register_yandex_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
-            print(register_rambler_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
+            # print(register_rambler_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
         break
