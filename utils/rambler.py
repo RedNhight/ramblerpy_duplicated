@@ -157,6 +157,11 @@ class Rambler:
         # self.step = 'Нажатие на иконку почту на главной rambler.ru.'
         # mail_icon = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/main/div[2]/div/div/div/div/div[4]/div/a')))
         # mail_icon.click()
+        try:
+            close_pop = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[6]/div/div/button[1]/svg')))
+            close_pop.click()
+        except Exception as ex:
+            pass
         self.step = 'Переход во вкладку "Отправить". '
         send_mail = self.longer.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div[3]/div[1]/div[1]/button/span')))
         send_mail.click()
@@ -167,12 +172,12 @@ class Rambler:
 
         subject = self.driver.find_element_by_id('subject')
         subject.click()
-        subject.send_keys('Приветствую!')
+        subject.send_keys('Привет, я тебе писал в telegram. Ты почему-то не отвечал. Напишу здесь!')
 
         tinymce = self.driver.find_element_by_xpath('/html/body/div')
         tinymce.click()
         action = ActionChains(self.driver)
-        action.send_keys(msg).perform()
+        action.send_keys('Оцени, пожалуйста, следующие строки: ' + msg).perform()
 
         submit_btn = self.driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[3]/div[2]/div[2]/div[1]/div/div/form/div/div[5]/div/div/button/span')
         submit_btn.click()
