@@ -20,7 +20,7 @@ class Rambler:
         self.profile.set_preference("network.proxy.type", 1)
         self.profile.set_preference("network.proxy.http", str(self.PROXY[0]))
         self.profile.set_preference("network.proxy.http_port", int(self.PROXY[1]))
-        self.profile.set_preference("general.useragent.override", self.useragent.firefox)
+        # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
         self.profile.set_preference('dom.webdriver.enabled', False)
         self.profile.set_preference('useAutomationExtension', False)
         self.profile.set_preference("intl.accept_languages", "en-en")
@@ -173,6 +173,9 @@ class Rambler:
         tinymce.click()
         action = ActionChains(self.driver)
         action.send_keys(msg).perform()
+
+        submit_btn = self.driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[3]/div[2]/div[2]/div[1]/div/div/form/div/div[5]/div/div/button/span')
+        submit_btn.click()
         self.step = 'Успех!'
 
     def driver_close(self):
