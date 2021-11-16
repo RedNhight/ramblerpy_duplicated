@@ -176,7 +176,7 @@ class Yandex:
         self.driver.refresh()
 
         try:
-            close_popup = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[16]/div[2]/table/tbody/tr/td/div[1]')))
+            close_popup = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[12]/div[2]/table/tbody/tr/td/div[1]')))
             close_popup.click()
         except Exception as ex:
             pass
@@ -186,7 +186,7 @@ class Yandex:
         write_a_msg.click()
 
         try:
-            close_popup = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[16]/div[2]/table/tbody/tr/td/div[1]')))
+            close_popup = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[12]/div[2]/table/tbody/tr/td/div[1]')))
             close_popup.click()
         except Exception as ex:
             pass
