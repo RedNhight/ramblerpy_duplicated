@@ -55,7 +55,6 @@ class CheckYandex:
         mail_field = self.wait.until(ec.presence_of_element_located((By.ID, 'passp-field-login')))
         mail_field.click()
         mail_field.send_keys(mail + Keys.ENTER)
-
         try:
             err_msg = self.wait.until(ec.presence_of_element_located((By.XPATH, '//*[@id="field:input-passwd:hint"]')))
             self.step = err_msg
