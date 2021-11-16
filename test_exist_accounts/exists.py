@@ -46,6 +46,7 @@ class CheckYandex:
         self.driver.get(self.url)
 
     def login(self, mail, passwd):
+        self.step = 'Логин. '
         try:
             login_btn = self.wait.until(ec.presence_of_element_located((By.LINK_TEXT, 'Войти')))
             login_btn.click()
@@ -62,10 +63,12 @@ class CheckYandex:
             self.driver.close()
         except Exception as ex:
             print(ex)
-
-        passwd_field = self.wait.until(ec.presence_of_element_located((By.ID, 'passp-field-passwd')))
-        passwd_field.click()
-        passwd_field.send_keys(passwd + Keys.ENTER)
+        try:
+            passwd_field = self.wait.until(ec.presence_of_element_located((By.ID, 'passp-field-passwd')))
+            passwd_field.click()
+            passwd_field.send_keys(passwd + Keys.ENTER)
+        except Exception as ex:
+            self.step = 'Такого аккаунта нет. '
 
         try:
             err_msg = self.wait.until(ec.presence_of_element_located((By.XPATH, '//*[@id="field:input-passwd:hint"]')))
@@ -138,14 +141,17 @@ class CheckRambler:
         self.driver.get(self.url)
 
     def login(self, mail, passwd):
+        self.step = 'Ввод логина. '
         login = self.wait.until(ec.presence_of_element_located((By.ID, 'login')))
         login.click()
         login.send_keys(mail)
 
+        self.step = 'Ввод пароля. '
         password = self.wait.until(ec.presence_of_element_located((By.ID, 'password')))
         password.click()
         password.send_keys(passwd)
 
+        self.step = 'Кнопка "Подтвердить"'
         submit = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div/article/form/button/span')
         submit.click()
 
