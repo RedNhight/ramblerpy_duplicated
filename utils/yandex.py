@@ -153,9 +153,7 @@ class Yandex:
 
         try:
             uncorrect_captcha = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div/div/div[2]/div/main/div/div/div/form/div[3]/div/div[2]/div[1]/div/div/div')))
-            if 'Вы неверно ввели' in uncorrect_captcha.text:
-                # Парсим сообщение об ошибки капчи. Обрабатываем, как и все exeptions в данном проекте.
-                self.step = f'Введение и подтверждение капчи; ошибка: {uncorrect_captcha.text}'
+            self.step = f'Введение и подтверждение капчи; ошибка: {uncorrect_captcha.text}'
         except Exception as ex:
             pass
 
@@ -177,9 +175,21 @@ class Yandex:
         sleep(2)
         self.driver.refresh()
 
+        try:
+            close_popup = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[16]/div[2]/table/tbody/tr/td/div[1]')))
+            close_popup.click()
+        except Exception as ex:
+            pass
+
         self.step = 'Подготовка к написанию письма.'
         write_a_msg = self.longer.until(ec.presence_of_element_located((By.CLASS_NAME, 'mail-ComposeButton-Text')))
         write_a_msg.click()
+
+        try:
+            close_popup = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[16]/div[2]/table/tbody/tr/td/div[1]')))
+            close_popup.click()
+        except Exception as ex:
+            pass
 
         self.step = 'Ввод адреса отправителя. '
         rec_input = self.wait.until(ec.presence_of_element_located((By.XPATH, '/html/body/div[2]/div[2]/div[10]/div/div/div[1]/div/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div[1]/div[1]/div/div/div/div/div')))
