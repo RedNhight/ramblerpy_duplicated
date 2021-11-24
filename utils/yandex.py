@@ -12,27 +12,26 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as ec
 from fake_useragent import UserAgent
+from .gologin_test import GoLogin
 
 # Other imports
 import os
 import random
 from time import sleep
-from utils.gologin_test import GoLogin
 
 
 # noinspection PyBroadException
 class Yandex:
     def __init__(self, captcha_token, proxy, *data):
         # Настройки антидетект браузера GoLogin.
+        gl = GoLogin({
+            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MTk5OGRmNjE1MDhmOTU5MDJhMTBlNTUiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MTlhY2QxNDhlZjA2MDU2OTJjZjJmYzkifQ.0FeXqd18_3rfvup0GcaM8WNKpkb-yRTDk9ZF_zNAKA0',
+            'profile_id': '61998df71508f906d7a10e57'
+        })
+        debugger = gl.start()
+
         self.proxy = proxy
         self.PROXY = proxy.split(':')
-        self.gl = GoLogin({
-            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MTk5OGRmNjE1MDhmOTU5MDJhMTBlNTUiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MTlhY2QxNDhlZjA2MDU2OTJjZjJmYzkifQ.0FeXqd18_3rfvup0GcaM8WNKpkb-yRTDk9ZF_zNAKA0',
-            'profile_id': '61998df71508f906d7a10e57',
-            # 'address': self.PROXY[0],
-            # 'port': self.PROXY[1]
-        })
-        self.debugger_add = self.gl.start()
 
         self.captcha_token = captcha_token
         self.step = 'Прогрузка страницы. '
@@ -41,26 +40,22 @@ class Yandex:
         self.mail_url = 'https://mail.yandex.ua/'
         self.yandex_url = 'https://passport.yandex.ru/registration/mail?'
 
-        self.opts = Options()
-        self.opts.add_experimental_option('debuggerAddress', self.debugger_add)
-        self.driver = webdriver.Chrome(
-            executable_path='/usr/local/bin/chromedriver',
-            options=self.opts
-        )
-
-        # Options.
-        # self.opt = Options()
-        # self.opt.add_argument('--headless')
+        # Настройки chromedriver.
+        self.opt = Options()
+        self.opt.add_experimental_option('debuggerAddress', debugger)
+        self.opt.add_argument('--disable-gpu')
+        # # self.opt.add_argument('--headless')
         # self.useragent = UserAgent()
         # self.profile = webdriver.FirefoxProfile()
         # self.profile.set_preference("network.proxy.type", 1)
         # self.profile.set_preference("network.proxy.http", str(self.PROXY[0]))
         # self.profile.set_preference("network.proxy.http_port", int(self.PROXY[1]))
+        # # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
         # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
         # self.profile.set_preference('dom.webdriver.enabled', False)
         # self.profile.set_preference('useAutomationExtension', False)
         # self.profile.set_preference("intl.accept_languages", "en-en")
-        # self.profile.set_preference("media.volume_scale", "0.0")
+        # self.profile.set_preference("media.volume_scale", "70.0")
         # self.profile.update_preferences()
         #
         # self.firecap = webdriver.DesiredCapabilities.FIREFOX
@@ -72,7 +67,12 @@ class Yandex:
         # }
         # self.driver = webdriver.Firefox(firefox_profile=self.profile,
         #                                 proxy=self.firecap,
+        #                                 options=self.opt
         #                                 )
+        self.driver = webdriver.Chrome(
+            chrome_options=self.opt,
+            executable_path='/home/penguin_nube/main_files/rambler_auth/utils/chromedriver'
+        )
         self.wait = WebDriverWait(self.driver, 5)
         self.longer = WebDriverWait(self.driver, 30)
         try:
@@ -124,6 +124,8 @@ class Yandex:
         text_inputs = self.wait.until(ec.presence_of_all_elements_located((By.CLASS_NAME, 'registration__label')))
         for i in range(6):
             # Вводим данные во все доступные поля.
+            print(text_inputs[i].text)
+            text_inputs[i].click()
             text_inputs[i].click()
             # ActionChains нам нужен, поскольку все поля прикрыты 'registration__label.
             # Этот "слой" не дает нам выполнять действия через обычный driver.click(), send_keys().
@@ -132,6 +134,7 @@ class Yandex:
             actions.send_keys(self.data[i])
             actions.perform()
             actions.reset_actions()
+            sleep(1)
         # Заполняем ответ на контрольный вопрос. Почему-то это поле не хочет заполняться вместе со всеми.
         # Посему, делаем так костыльно.
         self.step = 'Ввод ответа на контрольный вопрос. '
@@ -250,7 +253,6 @@ class Yandex:
 
     def driver_close(self):
         self.driver.quit()
-        self.gl.stop()
 
     def return_error(self):
         # Возвращаем ошибку.
@@ -262,3 +264,6 @@ class Yandex:
 
 if __name__ == '__main__':
     pass
+
+# lvrlmkhvrqF3
+# azanekrasovsari

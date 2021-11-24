@@ -4,9 +4,9 @@ from proxy_checker import ProxyChecker
 def checkout_proxy(address):
     checker = ProxyChecker()
     result = checker.check_proxy(f'{address}')
+    print(result)
     if result is not False:
         if result['timeout'] < 200:
-            print(result)
             if 'http' in result['protocols'] or 'https' in result['protocols']:
                 if result['country'] != '-':
                     return address

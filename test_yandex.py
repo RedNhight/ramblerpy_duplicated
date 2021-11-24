@@ -23,7 +23,6 @@ class Test(TestCase):
             for account in accounts:
                 current_proxy = fosy_proxy.get_proxy("http")
                 result = fake_auth_yandex(current_proxy, account['mail'], account['password'])
-                print(result)
                 self.assertRegex(result, "^Успех:.*", "Result: "+result)
 
 

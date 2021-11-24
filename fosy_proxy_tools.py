@@ -6,7 +6,8 @@ from proxy_checker import ProxyChecker
 
 class FosyProxyTools:
     def __init__(self, fosy_key):
-        fosy_url = "https://fosy.club/api/proxy/backconnect/link?key=" + fosy_key
+        fosy_url = 'https://fosy.club/api/http?key=MNpyBRenex&code='
+        # fosy_url = "https://fosy.club/api/proxy/backconnect/link?key=" + fosy_key
         all_proxies = requests.get(fosy_url)
         self.proxies = all_proxies.text.strip().split("\n")
         self.MAX_TRIES = 20

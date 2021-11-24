@@ -44,9 +44,10 @@ def register_yandex_account(proxy, receiver, twocaptcha_token):
     prp = ParsRandomPoety()
     ptp = prp.return_text()
     rf = reg_form()
+    print(rf[1])
+    print(rf[0])
     y = Yandex(twocaptcha_token, proxy, rf[2], rf[3], rf[0], rf[1], rf[1], ptp[0])
     try:
-        rf = reg_form()
         # Initialize Yandex class.
         y.fill_the_field_test()
         y.pars_captcha()
@@ -55,11 +56,11 @@ def register_yandex_account(proxy, receiver, twocaptcha_token):
         sleep(4)
         # y.send_mail(receiver=receiver, msg=f'Приветствую, {rf[2]} {rf[3]}. ::: {ptp[1]}')
     except Exception as ex:
-        sleep(10)
-        # y.driver_close()
-    sleep(10)
+        y.driver_close()
     error_step = y.return_error()
-    # y.driver_close()
+    y.driver_close()
+    print(rf[1])
+    print(rf[0])
     result = {
         'result': error_step,
         'mail': f'{rf[0]}@yandex.ru',
