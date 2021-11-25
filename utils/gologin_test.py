@@ -12,6 +12,7 @@ import tempfile
 
 API_URL = 'https://api.gologin.com'
 
+
 class GoLogin(object):
     def __init__(self, options):
         self.access_token = options.get('token')
