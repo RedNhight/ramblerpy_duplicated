@@ -1,5 +1,2 @@
-gologin filter=lfs diff=lfs merge=lfs -text
-gologin/browser filter=lfs diff=lfs merge=lfs -text
-gologin/extensions filter=lfs diff=lfs merge=lfs -text
-gologin/system-fonts.txt filter=lfs diff=lfs merge=lfs -text
 gologin/browser/orbita-browser-latest.tar.gz filter=lfs diff=lfs merge=lfs -text
+gologin filter=lfs diff=lfs merge=lfs -text
