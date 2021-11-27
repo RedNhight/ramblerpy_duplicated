@@ -20,7 +20,7 @@ class GoLogin(object):
         self.tmpdir = options.get('tmpdir', tempfile.gettempdir())
         self.address = options.get('address', '127.0.0.1')
         self.extra_params = options.get('extra_params', [])
-        self.port  = options.get('port', 3500)
+        self.port = options.get('port', 3500)
         self.local = options.get('local', False)
         self.spawn_browser = options.get('spawn_browser', True)
         self.credentials_enable_service = options.get('credentials_enable_service')

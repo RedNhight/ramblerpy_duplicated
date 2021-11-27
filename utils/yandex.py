@@ -24,11 +24,11 @@ from time import sleep
 class Yandex:
     def __init__(self, captcha_token, proxy, *data):
         # Настройки антидетект браузера GoLogin.
-        gl = GoLogin({
+        self.gl = GoLogin({
             'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MTk5OGRmNjE1MDhmOTU5MDJhMTBlNTUiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MTlhY2QxNDhlZjA2MDU2OTJjZjJmYzkifQ.0FeXqd18_3rfvup0GcaM8WNKpkb-yRTDk9ZF_zNAKA0',
             'profile_id': '61998df71508f906d7a10e57'
         })
-        debugger = gl.start()
+        debugger = self.gl.start()
 
         self.proxy = proxy
         self.PROXY = proxy.split(':')
@@ -43,8 +43,8 @@ class Yandex:
         # Настройки chromedriver.
         self.opt = Options()
         self.opt.add_experimental_option('debuggerAddress', debugger)
-        self.opt.add_argument('--disable-gpu')
-        # # self.opt.add_argument('--headless')
+        # self.opt.add_argument('--disable-gpu')
+        # self.opt.add_argument('--headless')
         # self.useragent = UserAgent()
         # self.profile = webdriver.FirefoxProfile()
         # self.profile.set_preference("network.proxy.type", 1)
@@ -73,6 +73,7 @@ class Yandex:
             chrome_options=self.opt,
             executable_path='/home/penguin_nube/main_files/rambler_auth/utils/chromedriver'
         )
+        self.driver.maximize_window()
         self.wait = WebDriverWait(self.driver, 5)
         self.longer = WebDriverWait(self.driver, 30)
         try:
@@ -252,7 +253,9 @@ class Yandex:
             pass
 
     def driver_close(self):
-        self.driver.quit()
+        self.driver.close()
+        sleep(1)
+        self.gl.stop()
 
     def return_error(self):
         # Возвращаем ошибку.
@@ -267,3 +270,5 @@ if __name__ == '__main__':
 
 # lvrlmkhvrqF3
 # azanekrasovsari
+# taisijasimonovsrl@yandex.ru
+# p_zkcgvrrwP4
