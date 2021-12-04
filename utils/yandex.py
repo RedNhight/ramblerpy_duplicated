@@ -5,30 +5,32 @@ from .solve_captcha import solve_normal_captcha
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-# from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
+# from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as ec
 from fake_useragent import UserAgent
-from .gologin_test import GoLogin
 
 # Other imports
 import os
 import random
+import requests
 from time import sleep
+from ast import literal_eval
 
 
 # noinspection PyBroadException
 class Yandex:
     def __init__(self, captcha_token, proxy, *data):
-        # Настройки антидетект браузера GoLogin.
-        self.gl = GoLogin({
-            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MTk5OGRmNjE1MDhmOTU5MDJhMTBlNTUiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MTlhY2QxNDhlZjA2MDU2OTJjZjJmYzkifQ.0FeXqd18_3rfvup0GcaM8WNKpkb-yRTDk9ZF_zNAKA0',
-            'profile_id': '61998df71508f906d7a10e57'
-        })
-        debugger = self.gl.start()
+        # Настройки антидетект браузера incogniton
+        incogniton_profile_id = '4a6ef814-c42e-4d85-a476-9f1daf070f48'
+        inc_url = f'http://127.0.0.1:35000/automation/launch/python/{incogniton_profile_id}'
+        print(inc_url)
+        resp = requests.get(inc_url)
+        incoming_json = resp.json()
+        py_dict = literal_eval(incoming_json['dataDict'])
 
         self.proxy = proxy
         self.PROXY = proxy.split(':')
@@ -40,10 +42,13 @@ class Yandex:
         self.mail_url = 'https://mail.yandex.ua/'
         self.yandex_url = 'https://passport.yandex.ru/registration/mail?'
 
-        # Настройки chromedriver.
-        self.opt = Options()
-        self.opt.add_experimental_option('debuggerAddress', debugger)
-        # self.opt.add_argument('--disable-gpu')
+        self.driver = webdriver.Remote(
+            command_executor=incoming_json['url'],
+            desired_capabilities=literal_eval(incoming_json['dataDict'])
+        )
+
+        # # Настройки chromedriver.
+        # self.opt = Options()
         # self.opt.add_argument('--headless')
         # self.useragent = UserAgent()
         # self.profile = webdriver.FirefoxProfile()
@@ -51,11 +56,12 @@ class Yandex:
         # self.profile.set_preference("network.proxy.http", str(self.PROXY[0]))
         # self.profile.set_preference("network.proxy.http_port", int(self.PROXY[1]))
         # # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
-        # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
         # self.profile.set_preference('dom.webdriver.enabled', False)
         # self.profile.set_preference('useAutomationExtension', False)
-        # self.profile.set_preference("intl.accept_languages", "en-en")
-        # self.profile.set_preference("media.volume_scale", "70.0")
+        # self.profile.set_preference("media.peerconnection.enabled", False)
+        # self.profile.set_preference("plugin.state.flash", 0)
+        # self.profile.set_preference("general.useragent.locale", "en")
+        # self.profile.set_preference("media.volume_scale", "30.0")
         # self.profile.update_preferences()
         #
         # self.firecap = webdriver.DesiredCapabilities.FIREFOX
@@ -69,10 +75,7 @@ class Yandex:
         #                                 proxy=self.firecap,
         #                                 options=self.opt
         #                                 )
-        self.driver = webdriver.Chrome(
-            chrome_options=self.opt,
-            executable_path='/home/penguin_nube/main_files/rambler_auth/utils/chromedriver'
-        )
+        # self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.driver.maximize_window()
         self.wait = WebDriverWait(self.driver, 5)
         self.longer = WebDriverWait(self.driver, 30)
@@ -81,6 +84,7 @@ class Yandex:
         except Exception as ex:
             self.driver.quit()
         sleep(2)
+        print(self.driver.session_id)
         self.driver.refresh()
 
     def pars_captcha(self):
@@ -253,7 +257,7 @@ class Yandex:
             pass
 
     def driver_close(self):
-        self.driver.close()
+        self.driver.quit()
         sleep(1)
         self.gl.stop()
 
