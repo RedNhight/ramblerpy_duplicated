@@ -1,37 +1,27 @@
 # Local imports
-from .solve_captcha import solve_normal_captcha
+from solve_captcha import solve_normal_captcha
 
 # Selenium imports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.firefox.options import Options
-# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as ec
-from fake_useragent import UserAgent
 
 # Other imports
 import os
 import random
 import requests
 from time import sleep
-from ast import literal_eval
 
 
 # noinspection PyBroadException
 class Yandex:
     def __init__(self, captcha_token, proxy, *data):
-        # Настройки антидетект браузера incogniton
-        incogniton_profile_id = '4a6ef814-c42e-4d85-a476-9f1daf070f48'
-        inc_url = f'http://127.0.0.1:35000/automation/launch/python/{incogniton_profile_id}'
-        print(inc_url)
-        resp = requests.get(inc_url)
-        incoming_json = resp.json()
-        py_dict = literal_eval(incoming_json['dataDict'])
-
         self.proxy = proxy
         self.PROXY = proxy.split(':')
 
@@ -41,11 +31,6 @@ class Yandex:
         self.filename = ''
         self.mail_url = 'https://mail.yandex.ua/'
         self.yandex_url = 'https://passport.yandex.ru/registration/mail?'
-
-        self.driver = webdriver.Remote(
-            command_executor=incoming_json['url'],
-            desired_capabilities=literal_eval(incoming_json['dataDict'])
-        )
 
         # # Настройки chromedriver.
         # self.opt = Options()
