@@ -1,5 +1,6 @@
 # Local imports
-from solve_captcha import solve_normal_captcha
+from .gologin import GoLogin
+from .solve_captcha import solve_normal_captcha
 
 # Selenium imports
 from selenium import webdriver
@@ -22,8 +23,22 @@ from time import sleep
 # noinspection PyBroadException
 class Yandex:
     def __init__(self, captcha_token, proxy, *data):
-        self.proxy = proxy
-        self.PROXY = proxy.split(':')
+        # Настройки антидетект браузера. 
+        gl = GoLogin({
+            'token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MWFmZDg1OWRlNjBjNzQwZGI2ZGFlZGIiLCJ0eXBlIjoiZGV2Iiwiand0aWQiOiI2MWFmZGJhYWRlNjBjN2YyNTc2ZGIwNDAifQ.zE2WYoZBIppdS_FmMClV6nuFZ1DYEk6hU6BMPL7O7gk',
+            'profile_id': '61afd859de60c7a8c36daedd'
+        })
+        self.chrome_driver_path = 'utils/chromedriver.exe'
+
+        self.debugger_address = gl.start()
+        self.chrome_opt = Options()
+        self.chrome_opt.add_experimental_option('debuggerAddress', self.debugger_address)
+        self.driver = webdriver.Chrome(
+            executable_path=self.chrome_driver_path,
+            options=self.chrome_opt
+        )
+        # self.proxy = proxy
+        # self.PROXY = proxy.split(':')
 
         self.captcha_token = captcha_token
         self.step = 'Прогрузка страницы. '
@@ -32,36 +47,7 @@ class Yandex:
         self.mail_url = 'https://mail.yandex.ua/'
         self.yandex_url = 'https://passport.yandex.ru/registration/mail?'
 
-        # # Настройки chromedriver.
-        # self.opt = Options()
-        # self.opt.add_argument('--headless')
-        # self.useragent = UserAgent()
-        # self.profile = webdriver.FirefoxProfile()
-        # self.profile.set_preference("network.proxy.type", 1)
-        # self.profile.set_preference("network.proxy.http", str(self.PROXY[0]))
-        # self.profile.set_preference("network.proxy.http_port", int(self.PROXY[1]))
-        # # self.profile.set_preference("general.useragent.override", self.useragent.firefox)
-        # self.profile.set_preference('dom.webdriver.enabled', False)
-        # self.profile.set_preference('useAutomationExtension', False)
-        # self.profile.set_preference("media.peerconnection.enabled", False)
-        # self.profile.set_preference("plugin.state.flash", 0)
-        # self.profile.set_preference("general.useragent.locale", "en")
-        # self.profile.set_preference("media.volume_scale", "30.0")
-        # self.profile.update_preferences()
-        #
-        # self.firecap = webdriver.DesiredCapabilities.FIREFOX
-        # self.firecap['marionette'] = True
-        # self.firecap['proxy'] = {
-        #     'proxyType': 'MANUAL',
-        #     'httpProxy': proxy,
-        #     'sslProxy': proxy
-        # }
-        # self.driver = webdriver.Firefox(firefox_profile=self.profile,
-        #                                 proxy=self.firecap,
-        #                                 options=self.opt
-        #                                 )
-        # self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-        self.driver.maximize_window()
+        # self.driver.maximize_window()
         self.wait = WebDriverWait(self.driver, 5)
         self.longer = WebDriverWait(self.driver, 30)
         try:

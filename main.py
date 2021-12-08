@@ -4,14 +4,12 @@ from gen import *
 from utils.yandex import Yandex
 from utils.rambler import Rambler
 
-from utils.checking_proxy import checkout_proxy
 from utils.solve_captcha import solve_normal_captcha
 from test_exist_accounts.exists import CheckYandex, CheckRambler
 
 # Libraries.
 import random
 from multiprocessing import Pool
-from pyvirtualdisplay import Display
 
 
 def fake_auth_yandex(proxy, mail, passwd):
@@ -118,34 +116,3 @@ if __name__ == '__main__':
             acc = register_yandex_account('', 'nikita07050565@gmail.com', '30a16da13415eb8c24eacb22428b9c0b')
             if acc['result'] == 'Успех!':
                 log_txt.write(acc['mail'] + ':' + acc['password'] + ':' + acc['secret'] + '\n')
-    # while True:
-        # ip = [
-        #     '146.59.18.78:5007',
-        #     '146.59.18.78:5008',
-        #     '146.59.18.78:5009',
-        #     '146.59.18.78:5010',
-        #     '146.59.18.78:5011',
-        #     '146.59.18.78:5012',
-        #     '146.59.18.78:5013'
-        # ]
-        # while True:
-        #     with Pool(6) as pl:
-        #         all_p = pl.map(checkout_proxy, ip)
-        #     filtred_list = filter(None.__ne__, all_p)
-        #     list_of_ip = list(filtred_list)
-        #     if len(list_of_ip) > 0:
-        #         break
-        #     sleep(5)
-        # if len(list_of_ip) > 1:
-        #     # fake_auth_rambler(random.choice(list_of_ip), 'mail@rambler.ru', 'passwd')
-        #     # fake_auth_yandex(random.choice(list_of_ip), 'militsakulagininc@yandex.ru', 'zserovklkjS5')
-        #     with open('logins.txt', 'a') as log_txt:
-        #         acc = register_yandex_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '30a16da13415eb8c24eacb22428b9c0b')
-        #         if acc['result'] == 'Успех!':
-        #             log_txt.write(acc['mail'] + ':' + acc['password'] + ':' + acc['secret'] + '\n')
-        #     # print(register_rambler_account(random.choice(list_of_ip), 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))
-        # if len(list_of_ip) == 1:
-        #     # fake_auth_rambler(list_of_ip[0], 'mail@rambler.ru', 'passwd')
-        #     # fake_auth_yandex(list_of_ip[0], 'militsakulagininc@yandex.ru', 'zserovklkjS5')
-        #     print(register_yandex_account(list_of_ip[0], 'nikita07050565@gmail.com', '30a16da13415eb8c24eacb22428b9c0b'))
-        #     # print(register_rambler_account(list_of_ip[0], 'nikita07050565@gmail.com', '587090417529ff6968eb9f0cb806c0e9'))

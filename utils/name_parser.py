@@ -53,11 +53,11 @@ class DataGen:
     def data_for_register(self):
         # Read names.
         gender = random.choice(['boys', 'girls'])
-        with open(self.config_dir+f'/{gender}.txt', 'r+') as read_names:
+        with open(self.config_dir+f'/{gender}.txt', 'r+', encoding='utf8') as read_names:
             name = read_names.read().strip().split('\n')
 
         # Read last names
-        with open(self.config_dir+'/last_names.txt', 'r+') as last_names:
+        with open(self.config_dir+'/last_names.txt', 'r+', encoding='utf8') as last_names:
             surname = last_names.read().strip().split('\n')
 
         first_name = random.choice(name)
